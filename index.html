@@ -1,867 +1,829 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Surprise MJ! 🎉</title>
+<title>Surprise MJ 🎉</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<style>
 
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      font-family: Arial, Helvetica, sans-serif;
-    }
+* {
+    box-sizing: border-box;
+}
 
-    /* =====================================
-       MAIN BACKGROUND
-    ===================================== */
-
-    body {
-      min-height: 100vh;
-
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      position: relative;
-
-      background-image: url("mj-background.jpg");
-
-      background-size: cover;
-      background-position: center center;
-      background-repeat: no-repeat;
-
-      background-color: #777;
-    }
-
-    /* Dark overlay */
-    body::before {
-      content: "";
-
-      position: fixed;
-      inset: 0;
-
-      background: rgba(0, 0, 0, 0.30);
-
-      z-index: 0;
-
-      pointer-events: none;
-    }
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
 
 
-    /* =====================================
-       SURPRISE MESSAGE
-    ===================================== */
+/* ================================
+   BACKGROUND
+================================ */
 
-    #intro {
-      position: relative;
-      z-index: 2;
+body {
 
-      text-align: center;
+    min-height: 100vh;
 
-      color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-      padding: 30px;
+    position: relative;
 
-      animation: popIn 0.8s ease;
-    }
+    background-color: #222;
 
-    #intro h1 {
-      margin: 0;
+    /*
+      Instead of COVER, we use CONTAIN.
+      This prevents the head from being cropped.
+    */
 
-      font-size: clamp(3rem, 10vw, 7rem);
+    background-image: url("mj-background.jpg");
 
-      font-weight: 800;
+    background-size: contain;
 
-      letter-spacing: -4px;
+    background-position: center top;
 
-      text-shadow:
-        0 5px 10px rgba(0,0,0,0.5),
-        0 10px 30px rgba(0,0,0,0.4);
-    }
+    background-repeat: no-repeat;
 
-    #intro p {
-      margin: 25px 0 30px;
+}
 
-      font-size: clamp(1rem, 3vw, 1.4rem);
 
-      font-weight: 500;
+/* Dark overlay */
 
-      text-shadow:
+body::after {
+
+    content: "";
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0,0,0,0.25);
+
+    z-index: 0;
+
+    pointer-events: none;
+
+}
+
+
+/* ================================
+   MESSAGE
+================================ */
+
+#intro {
+
+    position: relative;
+
+    z-index: 2;
+
+    text-align: center;
+
+    color: white;
+
+    padding: 20px;
+
+    margin-top: 30px;
+
+    animation: popIn 0.8s ease;
+
+}
+
+
+#intro h1 {
+
+    margin: 0;
+
+    font-size: clamp(3rem, 9vw, 7rem);
+
+    font-weight: 800;
+
+    letter-spacing: -3px;
+
+    text-shadow:
+
+        0 5px 10px rgba(0,0,0,0.6),
+
+        0 10px 30px rgba(0,0,0,0.5);
+
+}
+
+
+#intro p {
+
+    font-size: clamp(1rem, 3vw, 1.4rem);
+
+    margin: 20px 0 30px;
+
+    text-shadow:
+
         0 3px 10px rgba(0,0,0,0.8);
-    }
+
+}
 
 
-    /* =====================================
-       BUTTON
-    ===================================== */
+/* ================================
+   BUTTON
+================================ */
 
-    #openButton {
-      border: none;
+#openButton {
 
-      padding: 18px 35px;
+    border: none;
 
-      border-radius: 999px;
+    padding: 18px 38px;
 
-      background: #ff4f87;
+    border-radius: 50px;
 
-      color: white;
+    background: #ff4f87;
 
-      font-size: 18px;
+    color: white;
 
-      font-weight: bold;
+    font-size: 18px;
 
-      cursor: pointer;
+    font-weight: bold;
 
-      box-shadow:
-        0 10px 30px rgba(0,0,0,0.35);
+    cursor: pointer;
 
-      transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-    }
+    box-shadow:
 
-    #openButton:hover {
-      transform: scale(1.08);
+        0 10px 30px rgba(0,0,0,0.4);
 
-      box-shadow:
-        0 15px 40px rgba(0,0,0,0.45);
-    }
+    transition: 0.2s;
 
-    #openButton:active {
-      transform: scale(0.95);
-    }
+}
 
 
-    /* =====================================
-       VIDEO POPUP
-    ===================================== */
+#openButton:hover {
 
-    #videoPopup {
-      position: fixed;
+    transform: scale(1.08);
 
-      inset: 0;
-
-      width: 100vw;
-      height: 100vh;
-
-      background: #000;
-
-      display: none;
-
-      justify-content: center;
-      align-items: center;
-
-      z-index: 10;
-    }
-
-    #videoPopup.active {
-      display: flex;
-
-      animation: fadeIn 0.4s ease;
-    }
+}
 
 
-    /* =====================================
-       VIDEO
-    ===================================== */
+#openButton:active {
 
-    #surpriseVideo {
-      display: block;
+    transform: scale(0.95);
 
-      width: 100vw;
-      height: 100vh;
-
-      object-fit: contain;
-
-      background: #000;
-    }
+}
 
 
-    /* =====================================
-       CLOSE BUTTON
-    ===================================== */
+/* ================================
+   VIDEO
+================================ */
 
-    #closeButton {
-      position: absolute;
+#videoPopup {
 
-      top: 20px;
-      right: 20px;
+    position: fixed;
 
-      width: 50px;
-      height: 50px;
+    inset: 0;
 
-      border: none;
+    width: 100vw;
 
-      border-radius: 50%;
+    height: 100vh;
 
-      background: rgba(0,0,0,0.65);
+    background: black;
 
-      color: white;
+    display: none;
 
-      font-size: 30px;
+    justify-content: center;
 
-      line-height: 50px;
+    align-items: center;
 
-      cursor: pointer;
+    z-index: 10;
 
-      z-index: 20;
-
-      transition: 0.2s;
-    }
-
-    #closeButton:hover {
-      background: rgba(255,255,255,0.25);
-
-      transform: scale(1.1);
-    }
+}
 
 
-    /* =====================================
-       CONFETTI
-    ===================================== */
+#videoPopup.active {
 
-    #confettiCanvas {
-      position: fixed;
+    display: flex;
 
-      inset: 0;
+    animation: fadeIn 0.4s ease;
 
-      width: 100%;
-      height: 100%;
-
-      pointer-events: none;
-
-      z-index: 50;
-    }
+}
 
 
-    /* =====================================
-       ANIMATIONS
-    ===================================== */
+#surpriseVideo {
 
-    @keyframes popIn {
+    width: 100vw;
 
-      0% {
+    height: 100vh;
+
+    object-fit: contain;
+
+    background: black;
+
+}
+
+
+/* ================================
+   CLOSE BUTTON
+================================ */
+
+#closeButton {
+
+    position: absolute;
+
+    top: 20px;
+
+    right: 20px;
+
+    width: 50px;
+
+    height: 50px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: rgba(0,0,0,0.7);
+
+    color: white;
+
+    font-size: 30px;
+
+    cursor: pointer;
+
+    z-index: 20;
+
+}
+
+
+/* ================================
+   CONFETTI
+================================ */
+
+#confettiCanvas {
+
+    position: fixed;
+
+    inset: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    pointer-events: none;
+
+    z-index: 50;
+
+}
+
+
+/* ================================
+   ANIMATIONS
+================================ */
+
+@keyframes popIn {
+
+    0% {
+
         opacity: 0;
 
-        transform:
-          scale(0.5);
-      }
-
-      70% {
-        transform:
-          scale(1.05);
-      }
-
-      100% {
-        opacity: 1;
-
-        transform:
-          scale(1);
-      }
+        transform: scale(0.5);
 
     }
 
+    70% {
 
-    @keyframes fadeIn {
+        transform: scale(1.05);
 
-      from {
+    }
+
+    100% {
+
+        opacity: 1;
+
+        transform: scale(1);
+
+    }
+
+}
+
+
+@keyframes fadeIn {
+
+    from {
+
         opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
 
     }
 
-  </style>
+    to {
+
+        opacity: 1;
+
+    }
+
+}
+
+</style>
 </head>
 
 
 <body>
 
 
-  <!-- =====================================
-       CONFETTI
-  ===================================== -->
+<!-- CONFETTI -->
 
-  <canvas id="confettiCanvas"></canvas>
+<canvas id="confettiCanvas"></canvas>
 
 
-  <!-- =====================================
-       SURPRISE MESSAGE
-  ===================================== -->
+<!-- ================================
+     SURPRISE MESSAGE
+================================ -->
 
-  <div id="intro">
+<div id="intro">
 
     <h1>
-      🎁 Surprise MJ! 🎉
+        🎁 Surprise MJ! 🎉
     </h1>
 
     <p>
-      Something special is waiting for you...
+        Something special is waiting for you...
     </p>
 
     <button id="openButton">
-      Open the surprise ✨
+        Open the surprise ✨
     </button>
 
-  </div>
+</div>
 
 
-  <!-- =====================================
-       VIDEO POPUP
-  ===================================== -->
+<!-- ================================
+     VIDEO POPUP
+================================ -->
 
-  <div id="videoPopup">
+<div id="videoPopup">
 
     <button id="closeButton">
-      ×
+        ×
     </button>
 
-
     <video
-      id="surpriseVideo"
-      controls
-      playsinline
-      preload="auto"
+        id="surpriseVideo"
+        controls
+        playsinline
+        preload="auto"
     >
 
-      <source
-        src="surprise-video.mp4"
-        type="video/mp4"
-      >
+        <source
+            src="surprise-video.mp4"
+            type="video/mp4"
+        >
 
-      Your browser does not support MP4 video.
+        Your browser does not support video.
 
     </video>
 
-  </div>
+</div>
 
 
 <script>
 
-/* ==========================================
-   GET ELEMENTS
-========================================== */
+/* ================================
+   ELEMENTS
+================================ */
 
 const intro =
-  document.getElementById("intro");
+    document.getElementById("intro");
 
 const openButton =
-  document.getElementById("openButton");
+    document.getElementById("openButton");
 
 const videoPopup =
-  document.getElementById("videoPopup");
+    document.getElementById("videoPopup");
 
 const video =
-  document.getElementById("surpriseVideo");
+    document.getElementById("surpriseVideo");
 
 const closeButton =
-  document.getElementById("closeButton");
+    document.getElementById("closeButton");
 
 const canvas =
-  document.getElementById("confettiCanvas");
+    document.getElementById("confettiCanvas");
 
 const ctx =
-  canvas.getContext("2d");
+    canvas.getContext("2d");
 
 
-/* ==========================================
-   CANVAS SIZE
-========================================== */
+/* ================================
+   CANVAS
+================================ */
 
 function resizeCanvas() {
 
-  canvas.width =
-    window.innerWidth *
-    window.devicePixelRatio;
+    canvas.width =
+        window.innerWidth *
+        window.devicePixelRatio;
 
-  canvas.height =
-    window.innerHeight *
-    window.devicePixelRatio;
+    canvas.height =
+        window.innerHeight *
+        window.devicePixelRatio;
 
-  canvas.style.width =
-    window.innerWidth + "px";
+    canvas.style.width =
+        window.innerWidth + "px";
 
-  canvas.style.height =
-    window.innerHeight + "px";
+    canvas.style.height =
+        window.innerHeight + "px";
 
-  ctx.setTransform(
-    window.devicePixelRatio,
-    0,
-    0,
-    window.devicePixelRatio,
-    0,
-    0
-  );
+    ctx.setTransform(
+        window.devicePixelRatio,
+        0,
+        0,
+        window.devicePixelRatio,
+        0,
+        0
+    );
+
 }
 
 resizeCanvas();
 
 window.addEventListener(
-  "resize",
-  resizeCanvas
+    "resize",
+    resizeCanvas
 );
 
 
-/* ==========================================
+/* ================================
    CONFETTI
-========================================== */
+================================ */
 
-let confetti = [];
+let pieces = [];
 
-let confettiAnimation;
+let animation;
 
 
 function launchConfetti() {
 
-  confetti = [];
+    pieces = [];
 
-  const amount = 350;
+    for (
+        let i = 0;
+        i < 350;
+        i++
+    ) {
 
+        const angle =
+            Math.random() *
+            Math.PI *
+            2;
 
-  for (
-    let i = 0;
-    i < amount;
-    i++
-  ) {
-
-    const angle =
-      Math.random() *
-      Math.PI *
-      2;
-
-    const speed =
-      7 +
-      Math.random() * 14;
+        const speed =
+            7 +
+            Math.random() * 14;
 
 
-    confetti.push({
+        pieces.push({
 
-      x:
-        window.innerWidth / 2,
+            x:
+                window.innerWidth / 2,
 
-      y:
-        window.innerHeight / 2,
+            y:
+                window.innerHeight / 2,
 
-      vx:
-        Math.cos(angle) *
-        speed,
+            vx:
+                Math.cos(angle) * speed,
 
-      vy:
-        Math.sin(angle) *
-        speed -
-        8,
+            vy:
+                Math.sin(angle) * speed - 8,
 
-      gravity:
-        0.18 +
-        Math.random() * 0.15,
+            gravity:
+                0.2 +
+                Math.random() * 0.15,
 
-      size:
-        5 +
-        Math.random() * 8,
+            size:
+                5 +
+                Math.random() * 8,
 
-      rotation:
-        Math.random() * 6,
+            rotation:
+                Math.random() * 6,
 
-      rotationSpeed:
-        (Math.random() - 0.5) *
-        0.5,
+            rotationSpeed:
+                (Math.random() - 0.5) * 0.5,
 
-      life:
-        150 +
-        Math.random() * 120
+            life:
+                160 +
+                Math.random() * 120
 
-    });
+        });
 
-  }
+    }
 
 
-  cancelAnimationFrame(
-    confettiAnimation
-  );
+    cancelAnimationFrame(animation);
 
+    drawConfetti();
 
-  drawConfetti();
 }
 
 
 function drawConfetti() {
 
-  ctx.clearRect(
-    0,
-    0,
-    window.innerWidth,
-    window.innerHeight
-  );
-
-
-  const colors = [
-
-    "#ff4f87",
-    "#7c5cff",
-    "#00c2ff",
-    "#ffd447",
-    "#53d769",
-    "#ff7043",
-    "#ffffff"
-
-  ];
-
-
-  confetti.forEach(
-    (piece, index) => {
-
-      piece.x += piece.vx;
-
-      piece.y += piece.vy;
-
-      piece.vy += piece.gravity;
-
-      piece.rotation +=
-        piece.rotationSpeed;
-
-      piece.life--;
-
-
-      ctx.save();
-
-
-      ctx.translate(
-        piece.x,
-        piece.y
-      );
-
-
-      ctx.rotate(
-        piece.rotation
-      );
-
-
-      ctx.fillStyle =
-        colors[
-          index %
-          colors.length
-        ];
-
-
-      ctx.fillRect(
-
-        -piece.size / 2,
-
-        -piece.size / 2,
-
-        piece.size,
-
-        piece.size * 0.65
-
-      );
-
-
-      ctx.restore();
-
-    }
-  );
-
-
-  confetti =
-    confetti.filter(
-      piece =>
-        piece.life > 0 &&
-        piece.y <
-          window.innerHeight + 100
+    ctx.clearRect(
+        0,
+        0,
+        window.innerWidth,
+        window.innerHeight
     );
 
 
-  if (
-    confetti.length > 0
-  ) {
+    const colors = [
 
-    confettiAnimation =
-      requestAnimationFrame(
-        drawConfetti
-      );
+        "#ff4f87",
+        "#7c5cff",
+        "#00c2ff",
+        "#ffd447",
+        "#53d769",
+        "#ff7043",
+        "#ffffff"
 
-  }
+    ];
+
+
+    pieces.forEach(
+        (piece, index) => {
+
+            piece.x += piece.vx;
+
+            piece.y += piece.vy;
+
+            piece.vy += piece.gravity;
+
+            piece.rotation +=
+                piece.rotationSpeed;
+
+            piece.life--;
+
+
+            ctx.save();
+
+
+            ctx.translate(
+                piece.x,
+                piece.y
+            );
+
+
+            ctx.rotate(
+                piece.rotation
+            );
+
+
+            ctx.fillStyle =
+                colors[
+                    index %
+                    colors.length
+                ];
+
+
+            ctx.fillRect(
+
+                -piece.size / 2,
+
+                -piece.size / 2,
+
+                piece.size,
+
+                piece.size * 0.65
+
+            );
+
+
+            ctx.restore();
+
+        }
+    );
+
+
+    pieces =
+        pieces.filter(
+            piece =>
+                piece.life > 0
+        );
+
+
+    if (pieces.length > 0) {
+
+        animation =
+            requestAnimationFrame(
+                drawConfetti
+            );
+
+    }
 
 }
 
 
-/* ==========================================
+/* ================================
    BOOM SOUND
-========================================== */
+================================ */
 
-function playBoom() {
+function boomSound() {
 
-  const AudioContext =
-    window.AudioContext ||
-    window.webkitAudioContext;
+    const AudioContext =
+        window.AudioContext ||
+        window.webkitAudioContext;
 
-
-  if (!AudioContext) {
-    return;
-  }
+    if (!AudioContext) return;
 
 
-  const audio =
-    new AudioContext();
+    const audio =
+        new AudioContext();
+
+    const oscillator =
+        audio.createOscillator();
+
+    const gain =
+        audio.createGain();
+
+    const now =
+        audio.currentTime;
 
 
-  const oscillator =
-    audio.createOscillator();
-
-  const gain =
-    audio.createGain();
+    oscillator.type =
+        "sine";
 
 
-  const now =
-    audio.currentTime;
+    oscillator.frequency.setValueAtTime(
+        100,
+        now
+    );
 
 
-  oscillator.type =
-    "sine";
+    oscillator.frequency.exponentialRampToValueAtTime(
+        30,
+        now + 0.5
+    );
 
 
-  oscillator.frequency.setValueAtTime(
-    100,
-    now
-  );
+    gain.gain.setValueAtTime(
+        0.001,
+        now
+    );
 
 
-  oscillator.frequency.exponentialRampToValueAtTime(
-    30,
-    now + 0.5
-  );
+    gain.gain.exponentialRampToValueAtTime(
+        0.8,
+        now + 0.02
+    );
 
 
-  gain.gain.setValueAtTime(
-    0.001,
-    now
-  );
+    gain.gain.exponentialRampToValueAtTime(
+        0.001,
+        now + 0.5
+    );
 
 
-  gain.gain.exponentialRampToValueAtTime(
-    0.8,
-    now + 0.02
-  );
+    oscillator.connect(gain);
+
+    gain.connect(
+        audio.destination
+    );
 
 
-  gain.gain.exponentialRampToValueAtTime(
-    0.001,
-    now + 0.5
-  );
+    oscillator.start(now);
 
-
-  oscillator.connect(gain);
-
-  gain.connect(
-    audio.destination
-  );
-
-
-  oscillator.start(now);
-
-  oscillator.stop(
-    now + 0.5
-  );
+    oscillator.stop(
+        now + 0.5
+    );
 
 }
 
 
-/* ==========================================
+/* ================================
    OPEN SURPRISE
-========================================== */
+================================ */
 
 async function openSurprise() {
 
-  /* Boom */
+    boomSound();
 
-  playBoom();
+    launchConfetti();
 
+    intro.style.display =
+        "none";
 
-  /* Confetti */
-
-  launchConfetti();
-
-
-  /* Hide first screen */
-
-  intro.style.display =
-    "none";
-
-
-  /* Show video */
-
-  videoPopup.classList.add(
-    "active"
-  );
-
-
-  /* Reload video */
-
-  video.load();
-
-
-  /* Try autoplay */
-
-  try {
-
-    await video.play();
-
-  }
-
-  catch (error) {
-
-    console.log(
-      "Autoplay blocked. Press Play."
+    videoPopup.classList.add(
+        "active"
     );
 
-  }
+    video.load();
 
-
-  /* Try fullscreen */
-
-  try {
-
-    if (
-      document.documentElement
-        .requestFullscreen
-    ) {
-
-      await document.documentElement
-        .requestFullscreen();
-
-    }
-
-  }
-
-  catch (error) {
-
-    console.log(
-      "Fullscreen unavailable."
-    );
-
-  }
-
-}
-
-
-/* ==========================================
-   CLOSE VIDEO
-========================================== */
-
-async function closeVideo() {
-
-  video.pause();
-
-
-  if (
-    document.fullscreenElement
-  ) {
 
     try {
 
-      await document.exitFullscreen();
+        await video.play();
 
     }
 
-    catch (error) {}
+    catch (error) {
 
-  }
+        console.log(
+            "Press play if autoplay is blocked."
+        );
+
+    }
 
 
-  videoPopup.classList.remove(
-    "active"
-  );
+    /* Fullscreen */
 
+    try {
 
-  intro.style.display =
-    "block";
+        await video.requestFullscreen();
+
+    }
+
+    catch (error) {
+
+        try {
+
+            await document.documentElement
+                .requestFullscreen();
+
+        }
+
+        catch (error) {}
+
+    }
 
 }
 
 
-/* ==========================================
-   BUTTON EVENTS
-========================================== */
+/* ================================
+   CLOSE
+================================ */
+
+async function closeVideo() {
+
+    video.pause();
+
+
+    if (
+        document.fullscreenElement
+    ) {
+
+        try {
+
+            await document.exitFullscreen();
+
+        }
+
+        catch (error) {}
+
+    }
+
+
+    videoPopup.classList.remove(
+        "active"
+    );
+
+
+    intro.style.display =
+        "block";
+
+}
+
+
+/* ================================
+   BUTTONS
+================================ */
 
 openButton.addEventListener(
-  "click",
-  openSurprise
+    "click",
+    openSurprise
 );
 
 
 closeButton.addEventListener(
-  "click",
-  closeVideo
+    "click",
+    closeVideo
 );
 
 
-/* ==========================================
-   ESCAPE KEY
-========================================== */
+/* ESC */
 
 document.addEventListener(
-  "keydown",
-  function(event) {
+    "keydown",
+    function(event) {
 
-    if (
-      event.key === "Escape"
-    ) {
+        if (
+            event.key === "Escape"
+        ) {
 
-      closeVideo();
+            closeVideo();
+
+        }
 
     }
-
-  }
-);
-
-
-/* ==========================================
-   CHECK BACKGROUND IMAGE
-========================================== */
-
-const backgroundImage =
-  new Image();
-
-backgroundImage.src =
-  "mj-background.jpg";
-
-
-backgroundImage.onerror =
-  function() {
-
-    console.error(
-      "BACKGROUND ERROR: mj-background.jpg was not found."
-    );
-
-  };
-
-
-/* ==========================================
-   CHECK VIDEO
-========================================== */
-
-video.addEventListener(
-  "error",
-  function() {
-
-    console.error(
-      "VIDEO ERROR: surprise-video.mp4 was not found."
-    );
-
-  }
 );
 
 </script>
