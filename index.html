@@ -14,63 +14,110 @@
     html,
     body {
       margin: 0;
+      padding: 0;
       width: 100%;
       height: 100%;
       overflow: hidden;
       font-family: Arial, Helvetica, sans-serif;
     }
 
+    /* =====================================
+       MAIN BACKGROUND
+    ===================================== */
+
     body {
+      min-height: 100vh;
+
       display: flex;
       justify-content: center;
       align-items: center;
 
-      /* PHOTO BACKGROUND */
-      background-image:
-        linear-gradient(
-          rgba(0, 0, 0, 0.35),
-          rgba(0, 0, 0, 0.35)
-        ),
-        url("./mj-background.jpg");
+      position: relative;
+
+      background-image: url("mj-background.jpg");
 
       background-size: cover;
-      background-position: center;
+      background-position: center center;
       background-repeat: no-repeat;
+
+      background-color: #777;
     }
 
-    /* =========================
+    /* Dark overlay */
+    body::before {
+      content: "";
+
+      position: fixed;
+      inset: 0;
+
+      background: rgba(0, 0, 0, 0.30);
+
+      z-index: 0;
+
+      pointer-events: none;
+    }
+
+
+    /* =====================================
        SURPRISE MESSAGE
-    ========================= */
+    ===================================== */
 
     #intro {
-      text-align: center;
-      color: white;
-      padding: 25px;
-      animation: pop 0.8s ease;
+      position: relative;
       z-index: 2;
+
+      text-align: center;
+
+      color: white;
+
+      padding: 30px;
+
+      animation: popIn 0.8s ease;
     }
 
     #intro h1 {
       margin: 0;
+
       font-size: clamp(3rem, 10vw, 7rem);
-      text-shadow: 0 8px 30px rgba(0,0,0,0.5);
+
+      font-weight: 800;
+
+      letter-spacing: -4px;
+
+      text-shadow:
+        0 5px 10px rgba(0,0,0,0.5),
+        0 10px 30px rgba(0,0,0,0.4);
     }
 
     #intro p {
-      font-size: 1.2rem;
-      margin: 20px 0 30px;
-      text-shadow: 0 3px 15px rgba(0,0,0,0.7);
+      margin: 25px 0 30px;
+
+      font-size: clamp(1rem, 3vw, 1.4rem);
+
+      font-weight: 500;
+
+      text-shadow:
+        0 3px 10px rgba(0,0,0,0.8);
     }
+
+
+    /* =====================================
+       BUTTON
+    ===================================== */
 
     #openButton {
       border: none;
+
       padding: 18px 35px;
-      border-radius: 50px;
+
+      border-radius: 999px;
 
       background: #ff4f87;
+
       color: white;
 
       font-size: 18px;
+
       font-weight: bold;
 
       cursor: pointer;
@@ -78,11 +125,16 @@
       box-shadow:
         0 10px 30px rgba(0,0,0,0.35);
 
-      transition: 0.2s;
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
     }
 
     #openButton:hover {
       transform: scale(1.08);
+
+      box-shadow:
+        0 15px 40px rgba(0,0,0,0.45);
     }
 
     #openButton:active {
@@ -90,20 +142,24 @@
     }
 
 
-    /* =========================
+    /* =====================================
        VIDEO POPUP
-    ========================= */
+    ===================================== */
 
     #videoPopup {
       position: fixed;
+
       inset: 0;
 
       width: 100vw;
       height: 100vh;
 
-      background: black;
+      background: #000;
 
       display: none;
+
+      justify-content: center;
+      align-items: center;
 
       z-index: 10;
     }
@@ -111,28 +167,29 @@
     #videoPopup.active {
       display: flex;
 
-      justify-content: center;
-      align-items: center;
-
       animation: fadeIn 0.4s ease;
     }
 
 
-    /* FULL SCREEN VIDEO */
+    /* =====================================
+       VIDEO
+    ===================================== */
 
     #surpriseVideo {
+      display: block;
+
       width: 100vw;
       height: 100vh;
 
       object-fit: contain;
 
-      background: black;
+      background: #000;
     }
 
 
-    /* =========================
+    /* =====================================
        CLOSE BUTTON
-    ========================= */
+    ===================================== */
 
     #closeButton {
       position: absolute;
@@ -144,22 +201,34 @@
       height: 50px;
 
       border: none;
+
       border-radius: 50%;
 
       background: rgba(0,0,0,0.65);
+
       color: white;
 
       font-size: 30px;
 
+      line-height: 50px;
+
       cursor: pointer;
 
       z-index: 20;
+
+      transition: 0.2s;
+    }
+
+    #closeButton:hover {
+      background: rgba(255,255,255,0.25);
+
+      transform: scale(1.1);
     }
 
 
-    /* =========================
+    /* =====================================
        CONFETTI
-    ========================= */
+    ===================================== */
 
     #confettiCanvas {
       position: fixed;
@@ -175,23 +244,33 @@
     }
 
 
-    /* =========================
+    /* =====================================
        ANIMATIONS
-    ========================= */
+    ===================================== */
 
-    @keyframes pop {
+    @keyframes popIn {
 
       0% {
         opacity: 0;
-        transform: scale(0.5);
+
+        transform:
+          scale(0.5);
+      }
+
+      70% {
+        transform:
+          scale(1.05);
       }
 
       100% {
         opacity: 1;
-        transform: scale(1);
+
+        transform:
+          scale(1);
       }
 
     }
+
 
     @keyframes fadeIn {
 
@@ -211,13 +290,17 @@
 
 <body>
 
-  <!-- CONFETTI CANVAS -->
+
+  <!-- =====================================
+       CONFETTI
+  ===================================== -->
+
   <canvas id="confettiCanvas"></canvas>
 
 
-  <!-- =========================
-       FIRST SCREEN
-  ========================= -->
+  <!-- =====================================
+       SURPRISE MESSAGE
+  ===================================== -->
 
   <div id="intro">
 
@@ -236,15 +319,16 @@
   </div>
 
 
-  <!-- =========================
-       VIDEO
-  ========================= -->
+  <!-- =====================================
+       VIDEO POPUP
+  ===================================== -->
 
   <div id="videoPopup">
 
     <button id="closeButton">
       ×
     </button>
+
 
     <video
       id="surpriseVideo"
@@ -254,11 +338,11 @@
     >
 
       <source
-        src="./surprise-video.mp4"
+        src="surprise-video.mp4"
         type="video/mp4"
       >
 
-      Your browser does not support video playback.
+      Your browser does not support MP4 video.
 
     </video>
 
@@ -267,9 +351,9 @@
 
 <script>
 
-/* =========================
-   ELEMENTS
-========================= */
+/* ==========================================
+   GET ELEMENTS
+========================================== */
 
 const intro =
   document.getElementById("intro");
@@ -293,9 +377,9 @@ const ctx =
   canvas.getContext("2d");
 
 
-/* =========================
-   CANVAS
-========================= */
+/* ==========================================
+   CANVAS SIZE
+========================================== */
 
 function resizeCanvas() {
 
@@ -331,19 +415,27 @@ window.addEventListener(
 );
 
 
-/* =========================
+/* ==========================================
    CONFETTI
-========================= */
+========================================== */
 
-let pieces = [];
-let animation;
+let confetti = [];
+
+let confettiAnimation;
 
 
 function launchConfetti() {
 
-  pieces = [];
+  confetti = [];
 
-  for (let i = 0; i < 350; i++) {
+  const amount = 350;
+
+
+  for (
+    let i = 0;
+    i < amount;
+    i++
+  ) {
 
     const angle =
       Math.random() *
@@ -351,10 +443,11 @@ function launchConfetti() {
       2;
 
     const speed =
-      6 +
-      Math.random() * 15;
+      7 +
+      Math.random() * 14;
 
-    pieces.push({
+
+    confetti.push({
 
       x:
         window.innerWidth / 2,
@@ -363,13 +456,16 @@ function launchConfetti() {
         window.innerHeight / 2,
 
       vx:
-        Math.cos(angle) * speed,
+        Math.cos(angle) *
+        speed,
 
       vy:
-        Math.sin(angle) * speed - 8,
+        Math.sin(angle) *
+        speed -
+        8,
 
       gravity:
-        0.2 +
+        0.18 +
         Math.random() * 0.15,
 
       size:
@@ -380,17 +476,22 @@ function launchConfetti() {
         Math.random() * 6,
 
       rotationSpeed:
-        (Math.random() - 0.5) * 0.5,
+        (Math.random() - 0.5) *
+        0.5,
 
       life:
-        160 +
+        150 +
         Math.random() * 120
 
     });
 
   }
 
-  cancelAnimationFrame(animation);
+
+  cancelAnimationFrame(
+    confettiAnimation
+  );
+
 
   drawConfetti();
 }
@@ -405,7 +506,9 @@ function drawConfetti() {
     window.innerHeight
   );
 
+
   const colors = [
+
     "#ff4f87",
     "#7c5cff",
     "#00c2ff",
@@ -413,10 +516,11 @@ function drawConfetti() {
     "#53d769",
     "#ff7043",
     "#ffffff"
+
   ];
 
 
-  pieces.forEach(
+  confetti.forEach(
     (piece, index) => {
 
       piece.x += piece.vx;
@@ -433,14 +537,17 @@ function drawConfetti() {
 
       ctx.save();
 
+
       ctx.translate(
         piece.x,
         piece.y
       );
 
+
       ctx.rotate(
         piece.rotation
       );
+
 
       ctx.fillStyle =
         colors[
@@ -468,16 +575,20 @@ function drawConfetti() {
   );
 
 
-  pieces =
-    pieces.filter(
+  confetti =
+    confetti.filter(
       piece =>
-        piece.life > 0
+        piece.life > 0 &&
+        piece.y <
+          window.innerHeight + 100
     );
 
 
-  if (pieces.length > 0) {
+  if (
+    confetti.length > 0
+  ) {
 
-    animation =
+    confettiAnimation =
       requestAnimationFrame(
         drawConfetti
       );
@@ -487,21 +598,25 @@ function drawConfetti() {
 }
 
 
-/* =========================
+/* ==========================================
    BOOM SOUND
-========================= */
+========================================== */
 
-function boomSound() {
+function playBoom() {
 
   const AudioContext =
     window.AudioContext ||
     window.webkitAudioContext;
 
-  if (!AudioContext) return;
+
+  if (!AudioContext) {
+    return;
+  }
 
 
   const audio =
     new AudioContext();
+
 
   const oscillator =
     audio.createOscillator();
@@ -564,38 +679,41 @@ function boomSound() {
 }
 
 
-/* =========================
+/* ==========================================
    OPEN SURPRISE
-========================= */
+========================================== */
 
 async function openSurprise() {
 
-  /* BOOM */
-  boomSound();
+  /* Boom */
+
+  playBoom();
 
 
-  /* CONFETTI */
+  /* Confetti */
+
   launchConfetti();
 
 
-  /* HIDE MESSAGE */
+  /* Hide first screen */
+
   intro.style.display =
     "none";
 
 
-  /* SHOW VIDEO */
+  /* Show video */
+
   videoPopup.classList.add(
     "active"
   );
 
 
-  /* LOAD VIDEO */
+  /* Reload video */
+
   video.load();
 
 
-  /*
-    Try to play automatically.
-  */
+  /* Try autoplay */
 
   try {
 
@@ -606,15 +724,13 @@ async function openSurprise() {
   catch (error) {
 
     console.log(
-      "Autoplay blocked. Press the play button."
+      "Autoplay blocked. Press Play."
     );
 
   }
 
 
-  /*
-    Try browser fullscreen.
-  */
+  /* Try fullscreen */
 
   try {
 
@@ -641,9 +757,9 @@ async function openSurprise() {
 }
 
 
-/* =========================
-   CLOSE
-========================= */
+/* ==========================================
+   CLOSE VIDEO
+========================================== */
 
 async function closeVideo() {
 
@@ -676,9 +792,9 @@ async function closeVideo() {
 }
 
 
-/* =========================
-   BUTTONS
-========================= */
+/* ==========================================
+   BUTTON EVENTS
+========================================== */
 
 openButton.addEventListener(
   "click",
@@ -692,11 +808,13 @@ closeButton.addEventListener(
 );
 
 
-/* ESC KEY */
+/* ==========================================
+   ESCAPE KEY
+========================================== */
 
 document.addEventListener(
   "keydown",
-  event => {
+  function(event) {
 
     if (
       event.key === "Escape"
@@ -710,14 +828,37 @@ document.addEventListener(
 );
 
 
-/* VIDEO ERROR */
+/* ==========================================
+   CHECK BACKGROUND IMAGE
+========================================== */
+
+const backgroundImage =
+  new Image();
+
+backgroundImage.src =
+  "mj-background.jpg";
+
+
+backgroundImage.onerror =
+  function() {
+
+    console.error(
+      "BACKGROUND ERROR: mj-background.jpg was not found."
+    );
+
+  };
+
+
+/* ==========================================
+   CHECK VIDEO
+========================================== */
 
 video.addEventListener(
   "error",
-  () => {
+  function() {
 
     console.error(
-      "Video failed to load. Check that the filename is exactly surprise-video.mp4"
+      "VIDEO ERROR: surprise-video.mp4 was not found."
     );
 
   }
